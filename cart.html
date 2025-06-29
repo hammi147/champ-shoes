@@ -1,0 +1,108 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - Champ Shoes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Champ <span>Shoes</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="#" id="logout-link" style="display:none;">Logout</a>
+    </nav>
+  </header>
+
+  <main id="cart-items" class="product-grid">
+    <!-- Cart items will be loaded here -->
+  </main>
+
+  <footer>
+    <p>© 2025 Champ Shoes. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Champ Classic Runner",
+        price: 60,
+        image: "https://images.unsplash.com/photo-1698611028521-4c284ca88b11?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xhc3NpYyUyMHJ1bm5lciUyMHNob2V8ZW58MHx8MHx8fDA%3D"
+      },
+      {
+        id: 2,
+        name: "Urban Street Sneakers",
+        price: 75,
+        image: "https://images.unsplash.com/photo-1697986961090-367c706de666?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fFVyYmFuJTIwU3RyZWV0JTIwU25lYWtlcnN8ZW58MHx8MHx8fDA%3D"
+      },
+      {
+        id: 3,
+        name: "Champ Trail Boots",
+        price: 95,
+        image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9vdHxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        id: 4,
+        name: "Champ White Walkers",
+        price: 50,
+        image: "https://images.unsplash.com/photo-1604400389379-bd02bdc0f022?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8V2hpdGUlMjBXYWxrZXJzJTIwYm9vdHxlbnwwfHwwfHx8MA%3D%3D"
+      }
+    ];
+
+    const cartContainer = document.getElementById("cart-items");
+
+    function showCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+
+      cartContainer.innerHTML = "";
+
+      cart.forEach(id => {
+        const product = products.find(p => p.id === id);
+        if (product) {
+          total += product.price;
+          const item = document.createElement("div");
+          item.className = "product";
+          item.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>Price: $${product.price}</p>
+          `;
+          cartContainer.appendChild(item);
+        }
+      });
+
+      const totalBox = document.createElement("div");
+      totalBox.className = "product";
+      totalBox.innerHTML = `<h2>Total: $${total}</h2>`;
+      cartContainer.appendChild(totalBox);
+    }
+
+    function checkLoginStatus() {
+      const user = localStorage.getItem("user");
+      const loginLink = document.getElementById("login-link");
+      const logoutLink = document.getElementById("logout-link");
+
+      if (user && logoutLink && loginLink) {
+        loginLink.style.display = "none";
+        logoutLink.style.display = "inline";
+        logoutLink.onclick = () => {
+          localStorage.removeItem("user");
+          window.location.reload();
+        };
+      }
+    }
+
+    showCart();
+    checkLoginStatus();
+  </script>
+</body>
+</html>
